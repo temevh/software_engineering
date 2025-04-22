@@ -68,13 +68,11 @@ while True:
         vehicle = "car"
         print("No valid vehicle profile was entered. Using the car profile.")
     loc1 = input("Starting Location: ")
-    #loc1 = "Washington, D.C."
     if (loc1 == "quit" or loc1 == "q"):
         break
     orig = geocoding(loc1, key)
     print(orig)
     loc2 = input("Destination: ")
-    #loc2 = "Baltimore, Maryland"
     if (loc2 == "quit" or loc2 == "q"):
         break
     dest = geocoding(loc2, key)
