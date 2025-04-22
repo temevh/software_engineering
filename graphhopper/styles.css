@@ -1,0 +1,11 @@
+.input-div {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 200px;
+  }
+  
+  .input-div input {
+    padding: 8px;
+    font-size: 14px; 
+  }
