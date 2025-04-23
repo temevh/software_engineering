@@ -6,23 +6,12 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <script>
-    function fetchApi() {
-        fetch('http://localhost:8000/api/message')
-        .then(response => response.json())
-        .then(data => {
-            document.getElementById('apiMessage').textContent = data.message;
-        })
-        .catch(error => {
-            console.error('Error fetching data:', error);
-        });
-    }
-  </script>
   <p>Set starting location and destination, then press "Show route"</p>
   <div class="input-div">
-      <input placeholder="Starting location"/>
-      <input placeholder="Destination"/>
+    <input id="starting-location" placeholder="Starting location" />
+    <input placeholder="Destination" />
   </div>
-  <button type="button">Get route!</button>
+  <button type="button" id="get-button">Get route!</button>
+  <script src="script.js"></script>
 </body>
 </html>
