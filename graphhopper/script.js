@@ -26,6 +26,7 @@ function fetchRoute() {
     .then((response) => response.json())
     .then((data) => {
       console.log("Route data:", data);
+      document.getElementById("trip-information").textContent = data.message;
     })
     .catch((error) => {
       console.error("Error fetching route:", error);
