@@ -26,9 +26,32 @@ function fetchRoute() {
     .then((response) => response.json())
     .then((data) => {
       console.log("Route data:", data);
-      document.getElementById("trip-information").textContent = data.message;
+
+      document.getElementById(
+        "trip-start"
+      ).textContent = `Start: ${data.start}`;
+      document.getElementById(
+        "trip-destination"
+      ).textContent = `Destination: ${data.destination}`;
+
+      document.getElementById(
+        "trip-distance"
+      ).textContent = `Distance: ${data.distance.km} km (${data.distance.miles} miles)`;
+      document.getElementById(
+        "trip-duration"
+      ).textContent = `Duration: ${data.duration}`;
+
+      const instructionsList = document.getElementById("trip-instructions");
+      instructionsList.innerHTML = "";
+      data.instructions.forEach((instruction) => {
+        const listItem = document.createElement("li");
+        listItem.textContent = `${instruction.instruction} (${instruction.distance_km} km / ${instruction.distance_miles} miles)`;
+        instructionsList.appendChild(listItem);
+      });
     })
     .catch((error) => {
       console.error("Error fetching route:", error);
+      document.getElementById("trip-distance").textContent =
+        "Error fetching route.";
     });
 }

@@ -2,17 +2,23 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Route finder</title>
+  <title>Route Finder</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <p>Set starting location and destination, then press "Show route"</p>
   <div class="input-div">
     <input id="start" placeholder="Starting location" />
-    <input  id="destination" placeholder="Destination" />
+    <input id="destination" placeholder="Destination" />
   </div>
   <button type="button" id="get-button">Get route!</button>
-  <p id="trip-information"></p>
+
+  <p id="trip-start"></p>
+  <p id="trip-destination"></p>
+  <p id="trip-distance"></p>
+  <p id="trip-duration"></p>
+  <ul id="trip-instructions"></ul>
+
   <script src="script.js"></script>
 </body>
 </html>

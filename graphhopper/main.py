@@ -2,11 +2,11 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import requests
-import urllib.parse 
+import urllib.parse
 import os
 from dotenv import load_dotenv
 
-load_dotenv() 
+load_dotenv()
 
 key = os.getenv("API_KEY")
 
@@ -22,61 +22,66 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-def geocoding (location, key):
-    while location == "":
-        location = input("Enter the location again: ")
+def geocoding(location, key):
     geocode_url = "https://graphhopper.com/api/1/geocode?"
-    url = geocode_url + urllib.parse.urlencode({"q":location, "limit": "1",
-    "key":key, "vehicle": "car"})
-    print(url)
+    url = geocode_url + urllib.parse.urlencode({"q": location, "limit": "1", "key": key})
     replydata = requests.get(url)
     json_data = replydata.json()
     json_status = replydata.status_code
-    if json_status == 200:
+    if json_status == 200 and len(json_data["hits"]) > 0:
         lat = json_data["hits"][0]["point"]["lat"]
         lng = json_data["hits"][0]["point"]["lng"]
         name = json_data["hits"][0]["name"]
-        value = json_data["hits"][0]["osm_value"]
-
-        if "country" in json_data["hits"][0]:
-            country = json_data["hits"][0]["country"]
-        else:
-            country=""
-
-        if "state" in json_data["hits"][0]:
-            state = json_data["hits"][0]["state"]
-        else:
-            state=""
-
-        if len(state) !=0 and len(country) !=0:
-            new_loc = name + ", " + state + ", " + country
-        elif len(state) !=0:
-            new_loc = name + ", " + country
-        else:
-            new_loc = name
-
-            print("Geocoding API URL for " + new_loc + " (Location Type: " + value + ")\n"
-            + url)
+        return json_status, lat, lng, name
     else:
-        lat="null"
-        lng="null"
-        new_loc=location
-        if json_status != 200:
-            print("Geocode API status: " + str(json_status) + "\nError message: " + json_data["message"]) 
-    return json_status,lat,lng,new_loc 
-
+        return json_status, None, None, location
 
 class RouteRequest(BaseModel):
     start: str
     destination: str
 
-@app.get("/api/message")
-def get_message():
-    return {"message": "Hello from FastAPI!"}
-
 @app.post("/api/route")
 def get_route(route_request: RouteRequest):
     orig = geocoding(route_request.start, key)
     dest = geocoding(route_request.destination, key)
-    message = f"Route from {route_request.start} to {route_request.destination}"
-    return {"message": message}
+
+    if orig[0] == 200 and dest[0] == 200:
+        op = "&point=" + str(orig[1]) + "%2C" + str(orig[2])
+        dp = "&point=" + str(dest[1]) + "%2C" + str(dest[2])
+        paths_url = route_url + urllib.parse.urlencode({"key": key}) + op + dp
+        paths_response = requests.get(paths_url)
+        paths_status = paths_response.status_code
+        paths_data = paths_response.json()
+
+        if paths_status == 200:
+            miles = (paths_data["paths"][0]["distance"]) / 1000 / 1.61
+            km = (paths_data["paths"][0]["distance"]) / 1000
+            sec = int(paths_data["paths"][0]["time"] / 1000 % 60)
+            min = int(paths_data["paths"][0]["time"] / 1000 / 60 % 60)
+            hr = int(paths_data["paths"][0]["time"] / 1000 / 60 / 60)
+
+            instructions = []
+            for each in paths_data["paths"][0]["instructions"]:
+                path = each["text"]
+                distance_km = each["distance"] / 1000
+                distance_miles = distance_km / 1.61
+                instructions.append(
+                    {
+                        "instruction": path,
+                        "distance_km": round(distance_km, 1),
+                        "distance_miles": round(distance_miles, 1),
+                    }
+                )
+
+            return {
+                "status": "success",
+                "start": orig[3],
+                "destination": dest[3],
+                "distance": {"miles": round(miles, 1), "km": round(km, 1)},
+                "duration": f"{hr:02d}:{min:02d}:{sec:02d}",
+                "instructions": instructions,
+            }
+        else:
+            return {"status": "error", "message": paths_data.get("message", "Unknown error")}
+    else:
+        return {"status": "error", "message": "Failed to geocode one or both locations"}
