@@ -1,11 +1,88 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f9;
+  color: #333;
+  margin: 0;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .input-div {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    width: 200px;
-  }
-  
-  .input-div input {
-    padding: 8px;
-    font-size: 14px; 
-  }
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 300px;
+  margin-bottom: 20px;
+}
+
+.input-div input {
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+button {
+  padding: 10px 20px;
+  font-size: 16px;
+  color: #fff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+#instructions-div {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+#trip-instructions {
+  list-style-type: none;
+  padding: 0;
+  margin-top: 20px;
+  width: 300px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+#trip-instructions li {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+#trip-instructions li:last-child {
+  border-bottom: none;
+}
+
+p {
+  margin: 5px 0;
+  font-size: 16px;
+}
+
+#trip-start,
+#trip-destination,
+#trip-distance,
+#trip-duration {
+  font-weight: bold;
+  color: #007bff;
+}

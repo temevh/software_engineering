@@ -1,14 +1,30 @@
 document.getElementById("get-button").onclick = fetchRoute;
+nextBtn = document
+  .getElementById("next")
+  .addEventListener("click", function () {
+    if (instructions && index < instructions.length - 1) {
+      index++;
+      updateInstructions();
+    }
+  });
+prevBtn = document
+  .getElementById("previous")
+  .addEventListener("click", function () {
+    if (instructions && index > 0) {
+      index--;
+      updateInstructions();
+    }
+  });
 
-function testApi() {
-  fetch("http://localhost:8000/api/message")
-    .then((response) => response.json())
-    .then((data) => {
-      document.getElementById("apiMessage").textContent = data.message;
-    })
-    .catch((error) => {
-      console.error("Error fetching data:", error);
-    });
+instructions = null;
+index = 0;
+
+function updateInstructions() {
+  const instructionElement = document.getElementById("trip-instructions");
+  instructionElement.innerHTML = `
+    ${instructions[index].instruction} 
+    (${instructions[index].distance_km} km / ${instructions[index].distance_miles} miles)
+  `;
 }
 
 function fetchRoute() {
@@ -36,18 +52,14 @@ function fetchRoute() {
 
       document.getElementById(
         "trip-distance"
-      ).textContent = `Distance: ${data.distance.km} km (${data.distance.miles} miles)`;
+      ).textContent = `Total Distance: ${data.distance.km} km (${data.distance.miles} miles)`;
       document.getElementById(
         "trip-duration"
-      ).textContent = `Duration: ${data.duration}`;
-
-      const instructionsList = document.getElementById("trip-instructions");
-      instructionsList.innerHTML = "";
-      data.instructions.forEach((instruction) => {
-        const listItem = document.createElement("li");
-        listItem.textContent = `${instruction.instruction} (${instruction.distance_km} km / ${instruction.distance_miles} miles)`;
-        instructionsList.appendChild(listItem);
-      });
+      ).textContent = `Total duration: ${data.duration}`;
+      instructions = data.instructions;
+      document.getElementById(
+        "trip-instructions"
+      ).textContent = `${instructions[index].instruction}`;
     })
     .catch((error) => {
       console.error("Error fetching route:", error);
