@@ -54,7 +54,7 @@ button:disabled {
 
 #trip-instructions {
   list-style-type: none;
-  padding: 0;
+  padding: 10px;
   margin-top: 20px;
   width: 300px;
   background-color: #fff;
@@ -67,11 +67,7 @@ button:disabled {
 
 #trip-instructions li {
   padding: 10px;
-  border-bottom: 1px solid #eee;
-}
-
-#trip-instructions li:last-child {
-  border-bottom: none;
+  font-size: 18px; 
 }
 
 p {

@@ -21,9 +21,15 @@ index = 0;
 
 function updateInstructions() {
   const instructionElement = document.getElementById("trip-instructions");
+  const currentInstruction = instructions[index];
+
+  const distanceText =
+    currentInstruction.distance_km > 0
+      ? `(${currentInstruction.distance_km} km / ${currentInstruction.distance_miles} miles)`
+      : "";
+
   instructionElement.innerHTML = `
-    ${instructions[index].instruction} 
-    (${instructions[index].distance_km} km / ${instructions[index].distance_miles} miles)
+    ${currentInstruction.instruction} ${distanceText}
   `;
 }
 
