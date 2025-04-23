@@ -1,11 +1,6 @@
-document.getElementById("get-button").onclick = testFunc;
+document.getElementById("get-button").onclick = fetchRoute;
 
-function testFunc() {
-  const start = document.getElementById("starting-location").value;
-  alert("start is " + start);
-}
-
-function fetchApi() {
+function testApi() {
   fetch("http://localhost:8000/api/message")
     .then((response) => response.json())
     .then((data) => {
@@ -13,5 +8,26 @@ function fetchApi() {
     })
     .catch((error) => {
       console.error("Error fetching data:", error);
+    });
+}
+
+function fetchRoute() {
+  const url = "http://localhost:8000/api/route";
+  const start = document.getElementById("start").value;
+  const destination = document.getElementById("destination").value;
+
+  fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ start: start, destination: destination }),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("Route data:", data);
+    })
+    .catch((error) => {
+      console.error("Error fetching route:", error);
     });
 }
