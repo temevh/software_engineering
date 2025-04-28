@@ -25,6 +25,15 @@ start = "";
 destination = "";
 
 function reset() {
+  document.getElementById("start").value = "";
+  document.getElementById("destination").value = "";
+
+  document.getElementById("trip-start").textContent = "";
+  document.getElementById("trip-destination").textContent = "";
+  document.getElementById("trip-distance").textContent = "";
+  document.getElementById("trip-duration").textContent = "";
+  document.getElementById("trip-instructions").textContent = "";
+
   instructions = null;
   index = 0;
   distance = 0;
