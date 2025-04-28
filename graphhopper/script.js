@@ -18,10 +18,15 @@ prevBtn = document
 
 instructions = null;
 index = 0;
+distance = 0;
 
 function updateInstructions() {
   const instructionElement = document.getElementById("trip-instructions");
   const currentInstruction = instructions[index];
+  const distanceLeft = document.getElementById("distance-left");
+  distanceLeft.innerHTML = `
+    ${distance - currentInstruction.distance_km}
+  `;
 
   const distanceText =
     currentInstruction.distance_km > 0
@@ -48,6 +53,7 @@ function fetchRoute() {
     .then((response) => response.json())
     .then((data) => {
       console.log("Route data:", data);
+      distance = data.distance.km;
 
       document.getElementById(
         "trip-start"
