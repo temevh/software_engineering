@@ -1,4 +1,6 @@
 document.getElementById("get-button").onclick = fetchRoute;
+document.getElementById("reset-button").onclick = reset;
+
 nextBtn = document
   .getElementById("next")
   .addEventListener("click", function () {
@@ -19,14 +21,20 @@ prevBtn = document
 instructions = null;
 index = 0;
 distance = 0;
+start = "";
+destination = "";
+
+function reset() {
+  instructions = null;
+  index = 0;
+  distance = 0;
+  start = "";
+  destination = "";
+}
 
 function updateInstructions() {
   const instructionElement = document.getElementById("trip-instructions");
   const currentInstruction = instructions[index];
-  const distanceLeft = document.getElementById("distance-left");
-  distanceLeft.innerHTML = `
-    ${distance - currentInstruction.distance_km}
-  `;
 
   const distanceText =
     currentInstruction.distance_km > 0
@@ -40,8 +48,8 @@ function updateInstructions() {
 
 function fetchRoute() {
   const url = "http://localhost:8000/api/route";
-  const start = document.getElementById("start").value;
-  const destination = document.getElementById("destination").value;
+  start = document.getElementById("start").value;
+  destination = document.getElementById("destination").value;
 
   fetch(url, {
     method: "POST",
